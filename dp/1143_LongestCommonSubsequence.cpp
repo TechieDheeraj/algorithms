@@ -7,25 +7,37 @@
 
 class Solution {
 public:
-//    vector<vector<int>>dp;
     int dp[1001][1001];
-    int helper(string& one, string& two, uint16_t m ,uint16_t n) {
+  /*
+    int lcs(string& s1, string& s2, int n1, int n2) {
+      if (n1 == 0 || n2 == 0) return 0;
 
-      if (m == 0 || n == 0) return 0;
-      if (dp[m][n] != -1) return dp[m][n];
-      if (one[m-1] == two[n-1])  {
-        dp[m][n] = 1+helper(one, two, m-1, n-1);
-        return dp[m][n];
+      if (dp[n1][n2] != -1) return dp[n1][n2];
+      if (s1[n1-1] == s2[n2-1])
+        return dp[n1][n2] = 1+lcs(s1, s2, n1-1, n2-1);
+      else
+        return dp[n1][n2] = max(lcs(s1, s2, n1, n2-1), lcs(s1, s2, n1-1, n2));
+    }
+   */
+    int lcs(string &s1, string& s2, int n1, int n2) {
+      for (int i = 0; i < n1+1; ++i) {
+        for (int j = 0; j < n2+1; ++j) {
+          if (i == 0 || j == 0) {
+            dp[i][j] = 0;
+            continue;
+          }
+
+          if (s1[i-1] == s2[j-1])
+            dp[i][j] = 1+dp[i-1][j-1];
+          else
+            dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+        }
       }
-
-      dp[m][n] = max(helper(one, two, m-1, n), helper(one, two, m, n-1));
-      return dp[m][n];
+      return dp[n1][n2];
     }
     int longestCommonSubsequence(string& text1, string& text2) {
-      uint16_t m = text1.length();
-      uint16_t n = text2.length();
-      memset(dp, -1, sizeof(dp));
-//      dp.resize(m+1, vector<int>(n+1, -1));
-      return helper(text1, text2, m, n);
+      //memset(dp, 0, sizeof(dp));
+      //memset(dp, -1, sizeof(dp));
+      return lcs(text1, text2, text1.length(), text2.length());
     }
 };
