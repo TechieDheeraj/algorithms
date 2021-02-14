@@ -25,12 +25,14 @@ class GraphAL {
     vector<vector<T>>gh;
     int vertices;
     vector<T>edgeTo;
+    vector<int>visitedDfs;
 
     GraphAL(int vert) {
       //gh = new vector<T>gh[vert];
       gh.resize(vert);
       this->edgeTo.resize(vert);
       this->vertices = vert;
+      this->visitedDfs.resize(vert);
     }
 
     void addEdge(T u, T v) { 
@@ -91,18 +93,35 @@ class GraphAL {
 
     void graphDfs(int s) {
 
-      static vector<int>visited(this->vertices);
-
-      if (!visited[s]) {
+      if (!visitedDfs[s]) {
         cout << " Visited " << s << endl;
-        visited[s] = 1;
+        visitedDfs[s] = 1;
         for (int i = 0; i < gh[s].size(); ++i) { 
-          if (!visited[gh[s][i]]) {
+          if (!visitedDfs[gh[s][i]]) {
             this->edgeTo[gh[s][i]] = s;
             graphDfs(gh[s][i]);
           }
         }
       }
+    }
+
+    stack<int> pathTo(int st, int v) {
+      stack<int>s;
+
+      if (!this->visitedDfs[v]) return {};
+
+      for (int x = v; x != st; x = this->edgeTo[x])
+        s.push(x);
+      s.push(st);
+
+      cout << "Path is: "; 
+      while (!s.empty()) {
+        cout << s.top() << "-> ";
+        s.pop();
+      }
+      cout << endl;
+
+      return s;
     }
 };
 
@@ -145,7 +164,7 @@ int main() {
   for (int i = 0; i < gh.edgeTo.size(); ++i)
     cout << "Reached " << i << " from " <<  gh.edgeTo[i] << endl;
 
+  gh.pathTo(s, e);
+
   return 0;
 }
-
-  
