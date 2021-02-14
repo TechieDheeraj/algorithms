@@ -24,10 +24,12 @@ class GraphAL {
     //vector<T>gh;
     vector<vector<T>>gh;
     int vertices;
+    vector<T>edgeTo;
 
     GraphAL(int vert) {
       //gh = new vector<T>gh[vert];
       gh.resize(vert);
+      this->edgeTo.resize(vert);
       this->vertices = vert;
     }
 
@@ -95,8 +97,10 @@ class GraphAL {
         cout << " Visited " << s << endl;
         visited[s] = 1;
         for (int i = 0; i < gh[s].size(); ++i) { 
-          if (!visited[gh[s][i]])
+          if (!visited[gh[s][i]]) {
+            this->edgeTo[gh[s][i]] = s;
             graphDfs(gh[s][i]);
+          }
         }
       }
     }
@@ -138,6 +142,8 @@ int main() {
 
   //gh.graphBfs(s, e);
   gh.graphDfs(s);
+  for (int i = 0; i < gh.edgeTo.size(); ++i)
+    cout << "Reached " << i << " from " <<  gh.edgeTo[i] << endl;
 
   return 0;
 }
