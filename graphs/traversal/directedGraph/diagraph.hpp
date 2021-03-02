@@ -27,6 +27,10 @@ namespace diagraph {
         printGraph(0, this->gh);
       }
 
+      std::vector<std::vector<int>> getGraph() {
+        return this->gh;
+      }
+
       void printGraph(int vert, const std::vector<std::vector<int>>& gh) {
 
         if (vert >= this->vertices) 
@@ -55,7 +59,8 @@ namespace diagraph {
           auto v = q.front(); q.pop();
           for (int i = 0; i < gh[v].size(); ++i) {
             if (rev) { 
-              gr[gh[v][i]].push_back(v);
+              if (std::find(gr[gh[v][i]].begin(), gr[gh[v][i]].end(), v) == gr[gh[v][i]].end())
+                gr[gh[v][i]].push_back(v);
             }
             if (!visited[gh[v][i]]) {
               visited[gh[v][i]] = 1;
